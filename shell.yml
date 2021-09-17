@@ -1,0 +1,24 @@
+---
+- name: test shell command with expect
+  hosts: all
+  tasks:
+    - name: copy ftp files from remote host
+      shell: |
+        set verbose_flag 1
+        spawn ftp
+        send "open remote_ftp_server_name\n"
+        expect Name*
+        send "USERNAME\n"
+        expect Password*
+        send "PASSWORD\n"
+        expect "ftp*"
+        send "get FILENAME\n"
+        expect "ftp*"
+        send "bye\n"
+      args:
+        executable: /usr/bin/expect
+      register: ftp_output
+    
+    - name: show output
+      debug:
+        msg: "{{ ftp_output }}"
