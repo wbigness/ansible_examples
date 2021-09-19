@@ -1,6 +1,8 @@
 ---
 - name: test shell command with expect
   hosts: all
+  vars_files:
+    - password_file.yml
   tasks:
     - name: copy ftp files from remote host
       shell: |
@@ -8,9 +10,9 @@
         spawn ftp
         send "open remote_ftp_server_name\n"
         expect Name*
-        send "USERNAME\n"
+        send "{{ ftp_user }}\n"
         expect Password*
-        send "PASSWORD\n"
+        send "{{ ftp_pass }}\n"
         expect "ftp*"
         send "get FILENAME\n"
         expect "ftp*"
