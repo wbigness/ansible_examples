@@ -1,6 +1,7 @@
 ---
-- name: test shell command with expect
+- name: test shell command with expect 
   hosts: all
+  # store credentials in ansible-vault encrypted file
   vars_files:
     - password_file.yml
   tasks:
@@ -8,7 +9,7 @@
       shell: |
         set verbose_flag 1
         spawn ftp
-        send "open remote_ftp_server_name\n"
+        send "open {{ ftp_host }}\n"
         expect Name*
         send "{{ ftp_user }}\n"
         expect Password*
