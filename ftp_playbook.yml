@@ -1,0 +1,7 @@
+---
+- name: Download file from ftp server
+  hosts: test_servers
+  vars_files:
+    - ftp_credentials.yml
+  roles:
+    - ftp

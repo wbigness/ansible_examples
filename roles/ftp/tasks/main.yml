@@ -1,0 +1,36 @@
+---
+# determine where the expect command is located
+- name: get path to expect shell
+  shell: which expect
+  register: path_to_expect_shell
+
+# check to see if the target file already exists
+- name: chck file exists
+  file:
+    path: readme.txt
+  register: file_status
+  ignore_errors: yes
+
+- name: download file from ftp server
+  shell: |
+    set verbose_flag 1
+    spawn ftp "{{ ftp_host }}"
+    expect Name*
+    send "{{ ftp_user }}\n"
+    expect Password*
+    send "{{ ftp_pass }}\n"
+    expect "ftp*"
+    send "get readme.txt\n"
+    expect "ftp*"
+    send "bye\n"
+  args:
+    executable: "{{ path_to_expect_shell['stdout_lines'][0] }}"
+  register: ftp_result
+  when: file_status['failed'] == true
+
+# only show the ftp session result if we actually ran it
+- name: display ftp session result
+  debug:
+    msg: 
+      - "{{ ftp_result['stdout_lines'] }}"
+  when: ftp_result['changed']
