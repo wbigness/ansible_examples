@@ -6,7 +6,7 @@
 
   tasks:
     - name: get current date
-      local_action: command date +%Y%m%d-%H%M%Z
+      local_action: command date +%Y%m%d
       run_once: true
       register: date
   
