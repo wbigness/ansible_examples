@@ -3,6 +3,10 @@
   hosts: dev_hosts
   connection: network_cli
   vars_prompt:
+    - name: cisco_username
+      prompt: Enter the Cisco Username
+      unsafe: yes
+      private: yes
     - name: cisco_password
       prompt: Enter the Cisco password
       unsafe: yes
@@ -12,3 +16,7 @@
     - name: show cisco version
       cisco.ios.ios_command:
         commands: show version
+        provider:
+          username: "{{ cisco_username }}"
+          password: "{{ cisco_password }}"
+          
