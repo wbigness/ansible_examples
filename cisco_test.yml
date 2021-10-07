@@ -1,0 +1,14 @@
+---
+- name: testing connection
+  hosts: dev_hosts
+  connection: network_cli
+  vars_prompt:
+    - name: cisco_password
+      prompt: Enter the Cisco password
+      unsafe: yes
+      private: yes
+  
+  tasks:
+    - name: show cisco version
+      cisco.ios.ios_command:
+        commands: show version
