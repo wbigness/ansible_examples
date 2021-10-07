@@ -19,4 +19,8 @@
         provider:
           username: "{{ cisco_username }}"
           password: "{{ cisco_password }}"
-          
+      register: result
+    
+    - name: show result
+      debug:
+        msg: "{{ result }}"
