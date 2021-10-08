@@ -3,6 +3,8 @@
   hosts: dev_hosts
   gather_facts: false
   connection: network_cli
+  vars:
+    ansible_network_os: ios
   vars_prompt:
     - name: ansible_user
       prompt: Enter the Cisco Username
