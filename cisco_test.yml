@@ -1,24 +1,22 @@
 ---
 - name: testing connection
   hosts: dev_hosts
+  gather_facts: false
   connection: network_cli
   vars_prompt:
-    - name: cisco_username
+    - name: ansible_ssh_user
       prompt: Enter the Cisco Username
       unsafe: yes
       private: yes
-    - name: cisco_password
+    - name: ansible_ssh_password
       prompt: Enter the Cisco password
       unsafe: yes
       private: yes
   
   tasks:
     - name: show cisco version
-      cisco.ios.ios_command:
+      ios_command:
         commands: show version
-        provider:
-          username: "{{ cisco_username }}"
-          password: "{{ cisco_password }}"
       register: result
     
     - name: show result
