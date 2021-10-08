@@ -4,11 +4,11 @@
   gather_facts: false
   connection: network_cli
   vars_prompt:
-    - name: ansible_ssh_user
+    - name: ansible_user
       prompt: Enter the Cisco Username
       unsafe: yes
       private: yes
-    - name: ansible_ssh_password
+    - name: ansible_password
       prompt: Enter the Cisco password
       unsafe: yes
       private: yes
