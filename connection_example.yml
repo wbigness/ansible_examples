@@ -1,0 +1,16 @@
+---
+- name: example to show the difference between local connection and ssh
+  hosts: test_servers
+  connection: local
+  
+  tasks:
+    - name: get hostname
+      command: hostname
+      register: host_name_result
+
+    - name: show hostname
+      debug:
+        msg:
+          - "hostname: {{ host_name_result.stdout }}"
+          - "inventory_host: {{ inventory_hostname }}"
+          - "ansible_host: {{ ansible_host }}"
