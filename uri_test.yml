@@ -5,6 +5,7 @@
   vars_prompt:
     - name: url_value
       prompt: Enter the url
+      private: no
       unsafe: yes
     - name: url_username
       prompt: Enter the url Username
