@@ -1,0 +1,19 @@
+---
+- name: test loop
+  hosts: localhost
+  vars:
+    profiles:
+      - profile_name: "first_profile"
+        nodes:
+          - "node1"
+          - "node2"
+      - profile_name: "second_profile"
+        nodes:
+          - "node3"
+          - "node4"
+    
+  tasks:
+    - name: show it
+      debug:
+        msg: "{{ item.profile_name }} {{ item.nodes }}"
+      loop: "{{ profiles }}"
