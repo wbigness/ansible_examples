@@ -1,0 +1,34 @@
+---
+- name: test uri module
+  hosts: localhost
+  connection: local
+  vars_prompt:
+    - name: url_value
+      prompt: Enter the url
+      unsafe: yes
+    - name: url_username
+      prompt: Enter the url Username
+      unsafe: yes
+      private: yes
+    - name: url_password
+      prompt: Enter the url password
+      unsafe: yes
+      private: yes
+  tasks:
+    - name: download the home page
+      uri:
+        url: "{{ url_value }}"
+        user: url_username
+        password: url_password
+        method: GET
+        return_content: yes
+        validate_certs: no
+        force_basic_auth: yes
+        status_code: 200
+      register: uri_result
+    
+    - name: show result
+      debug:
+        msg: "{{ uri_result }}"
+        
+  
