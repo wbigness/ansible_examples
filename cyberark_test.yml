@@ -37,12 +37,16 @@
     - name: show the return values from connection
       debug:
         msg: "{{ cyberark_authentication }}"
-
-    - name: retrieve credential
-      cyberark.pas.cyberark_user:
-        username: "{{ target_username }}"
-        location: "{{ vault_location }}"
-        cyberark_session: "{{ cyberark_session }}"
+  
+    - name: credential retrieval advanced
+      cyberark_credential:
+        api_base_url: "{{ cyberark_url }}"
+        validate_certs: no
+        app_id: 
+        query: "safe=;folder=;object="
+        connection_timeout: 60
+        query_format: Exact
+        reason: "requesting credential for Ansible deployment"
       register: cyberark_credential
     
     - name: display user details
