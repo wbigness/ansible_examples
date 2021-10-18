@@ -1,0 +1,24 @@
+---
+- name: Test for freespace
+  hosts: localhost
+  vars:
+    current_version: 12.1a
+    new_version: 14.1a
+    file_size: 6333
+    netfilesystems:
+      flash::
+        spacefree_kb: 9999
+        spaceused_kb: 1111
+  tasks:
+    - name: only upgrade if conditions pass
+      block:
+        - name: upload file
+          debug:
+            msg: "upgrading"
+        
+        - name: change flash path
+          debug:
+            msg: "change flash"
+      when: 
+        - netfilesystems['flash:'].spacefree_kb - file_size > 0
+        - current_version != new_version
