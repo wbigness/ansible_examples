@@ -48,7 +48,8 @@
         query_format: Exact
         reason: "requesting credential for Ansible deployment"
       register: cyberark_credential
-    
+      no_log: true
+      
     - name: display user details
       debug:
         msg: "{{ cyberark_credential }}"
