@@ -39,7 +39,7 @@
         msg: "{{ cyberark_authentication }}"
   
     - name: credential retrieval advanced
-      cyberark_credential:
+      cyberark.pas.cyberark_credential:
         api_base_url: "{{ cyberark_url }}"
         validate_certs: no
         app_id: 
