@@ -16,9 +16,13 @@
           debug:
             msg: "upgrading"
         
-        - name: change flash path
-          debug:
-            msg: "change flash"
+        - name: update to new version
+          set_fact:
+            current_version: "{{ new_version }}"
       when: 
         - netfilesystems['flash:'].spacefree_kb - file_size > 0
         - current_version != new_version
+    - name: ASSERT THAT THE IOS VERSION IS CORRECT
+      assert:
+        that:
+          - current_version == new_version
