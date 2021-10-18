@@ -22,7 +22,7 @@
       when: 
         - netfilesystems['flash:'].spacefree_kb - file_size > 0
         - current_version != new_version
-    - name: ASSERT THAT THE IOS VERSION IS CORRECT
+    - name: check version upgrage is correct
       assert:
         that:
           - current_version == new_version
