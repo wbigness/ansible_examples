@@ -1,8 +1,9 @@
 ---
 - name: example to show the difference between local connection and ssh
   hosts: test_servers
+  gather_facts: no
   connection: local
-  
+
   tasks:
     - name: get hostname
       command: hostname

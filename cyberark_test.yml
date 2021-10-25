@@ -45,10 +45,13 @@
         cyberark_session: "{{ cyberark_session }}"
       register: cyberark_credential
       no_log: true
+    
     - name: credential retrieval advanced
       cyberark.pas.cyberark_credential:
         api_base_url: "{{ cyberark_url }}"
-        validate_certs: no
+        client_cert: /etc/pki/ca-trust/source/client.pem
+        client_key: /etc/pki/ca-trust/source/priv-key.pem
+        #validate_certs: no
         app_id: 
         query: "safe=;folder=;object="
         connection_timeout: 60
