@@ -9,43 +9,12 @@
       prompt: Enter the url
       private: no
       unsafe: yes
-    - name: cyberark_username
-      prompt: Enter the url Username
-      unsafe: yes
-      private: yes
-    - name: cyberark_password
-      prompt: Enter the url password
-      unsafe: yes
-      private: yes
     - name: target_username
       prompt: Enter the username to retrieve
       unsafe: yes
       private: yes
   
   tasks:
-    - name: connect to CyberArk
-      cyberark.pas.cyberark_authentication:
-        api_base_url: "{{ cyberark_url }}"
-        username: "{{ cyberark_username }}"
-        password: "{{ cyberark_password }}"
-        use_cyberark_authentication: yes
-        use_ldap_authentication: no
-        use_radius_authentication: no
-        use_windows_authentication: no
-        use_shared_logon_authentication: no
-
-    - name: show the return values from connection
-      debug:
-        msg: "{{ cyberark_authentication }}"
-    
-    - name: retrieve credential
-      cyberark.pas.cyberark_user:
-        username: "{{ target_username }}"
-        location: "{{ vault_location }}"
-        cyberark_session: "{{ cyberark_session }}"
-      register: cyberark_credential
-      no_log: true
-    
     - name: credential retrieval advanced
       cyberark.pas.cyberark_credential:
         api_base_url: "{{ cyberark_url }}"
@@ -63,8 +32,3 @@
     - name: display user details
       debug:
         msg: "{{ cyberark_credential }}"
-    
-    - name: Logoff from CyberArk Vault
-      cyberark_authentication:
-        state: absent
-        cyberark_session: '{{ cyberark_session }}'
