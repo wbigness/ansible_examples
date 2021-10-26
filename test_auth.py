@@ -50,10 +50,13 @@ out = channel.recv(9999)
 # loop through the commands above, requires concat'ed '\n'
 for command in commands:
     channel.send(command+'\n')
-    
+    while not channel.recv_ready():
+        time.sleep(1)    
+    out = channel.recv(9999)
+    print(out.decode("ascii"))
 
-while not channel.recv_ready():
-    time.sleep(1)
+#while not channel.recv_ready():
+#    time.sleep(1)
     
 out = channel.recv(9999)
 print(out.decode("ascii"))

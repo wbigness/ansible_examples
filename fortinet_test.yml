@@ -1,0 +1,33 @@
+---
+- name: test connection to fortinet FW
+  hosts: fortinet_hosts
+  gather_facts: no
+  connection: httpapi
+  vars:
+    ansible_httpapi_use_ssl: yes
+    ansible_httpapi_validate_certs: no
+    ansible_httpapi_port: 443
+    vdom: root
+  vars_prompt:
+    - name: fortinet_username
+      prompt: Enter the fortinet Username
+      unsafe: yes
+      private: yes
+    - name: fortinet_password
+      prompt: Enter the fortinet password
+      unsafe: yes
+      private: yes
+
+  tasks:
+    - name: gather information from device
+      fortinet.fortios.fortios_facts:
+        host: {{ ansible_host }}
+        ssl_verify: no
+        username: {{ fortinet_username }}
+        password: {{ fortinet_password }}
+        vdom: "{{ vdom }}"
+      register: fortinet_facts
+    
+    - name: show result
+      debug:
+        msg: "{{ fortinet_facts }}"
