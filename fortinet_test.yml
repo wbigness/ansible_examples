@@ -20,11 +20,11 @@
 
   tasks:
     - name: gather information from device
-      fortinet.fortios.fortios_facts:
-        host: {{ ansible_host }}
+      fortios_facts:
+        host: "{{ ansible_host }}"
         ssl_verify: no
-        username: {{ fortinet_username }}
-        password: {{ fortinet_password }}
+        username: "{{ fortinet_username }}"
+        password: "{{ fortinet_password }}"
         vdom: "{{ vdom }}"
       register: fortinet_facts
     
