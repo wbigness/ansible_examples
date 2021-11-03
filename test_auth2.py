@@ -26,7 +26,7 @@ my_ip = args.ip
 my_pass = getpass()
 
 # command to run
-command = 'ls -l'
+command = 'hostname'
 
 # setup the paramiko client connection
 ssh = paramiko.SSHClient()
