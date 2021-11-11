@@ -1,4 +1,5 @@
 ---
+# Example for referencing dict keys with a colon in the key name
 - name: Test for freespace
   hosts: localhost
   vars:
