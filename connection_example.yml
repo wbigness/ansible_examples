@@ -3,6 +3,8 @@
   hosts: test_servers
   gather_facts: no
   connection: local
+  vars:
+    device: "{{ ansible_host }}"
 
   tasks:
     - name: get hostname
@@ -15,3 +17,4 @@
           - "hostname: {{ host_name_result.stdout }}"
           - "inventory_host: {{ inventory_hostname }}"
           - "ansible_host: {{ ansible_host }}"
+          - "device: {{ device }}"
