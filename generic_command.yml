@@ -24,10 +24,10 @@
     - name: generate first conf file
       ansible.builtin.template:
         src: process_one.j2
-        dest: process_one.json
+        dest: "{{ ansible_host }}process_one.json"
 
     - name: process 1
-      command: your_command.py process_one.json
+      command: "your_command.py {{ ansible_host }}process_one.json"
       register: process_1_result
 
     - name: show process 1 result
@@ -37,11 +37,11 @@
     - name: generate second conf file
       ansible.builtin.template:
         src: process_two.j2
-        dest: process_two.json
+        dest: "{{ ansible_host }}process_two.json"
 
     # run command up to 10 times every 15 secs until result contains "Idle"
     - name: process 2
-      command: your_command.py process_two.json
+      command: "your_command.py {{ ansible_host }}process_two.json"
       register: process_2_result
       until: process_2_result.stdout.find("Idle") == 1
       retries: 10
@@ -54,10 +54,10 @@
     - name: generate third conf file
       ansible.builtin.template:
         src: process_three.j2
-        dest: process_three.json
+        dest: "{{ ansible_host }}process_three.json"
 
     - name: process 3
-      command: your_command.py process_three.json
+      command: "your_command.py {{ ansible_host }}process_three.json"
       register: process_3_result
 
     - name: show process 3 result
