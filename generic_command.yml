@@ -2,6 +2,9 @@
 - name: Run a series of Commands
   hosts: your_host_group
   connection: local
+  vars:
+    process_one_commands: "[ls -l, cat /etc/hosts]"
+    process_two_commands: "[ls -l, cat /etc/hosts]"
   vars_prompt:
     - name: device_user
       prompt: Enter the username

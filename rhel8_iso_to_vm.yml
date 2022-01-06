@@ -1,0 +1,74 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+    - vcenter_vars.yml
+  vars:
+    hostname: kickstart_vm
+  tasks:
+  - name: Boot VM with RHEL 8 installation iso in CDROM
+    vmware_guest:
+      validate_certs: False
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter: "{{ dc1 }}"
+      state: poweredon
+      cluster: Cluster01
+      disk:
+        - size_gb: 2
+          type: thin
+          datastore: Datastore01
+      cdrom:
+        - controller_number: 0
+          unit_number: 0
+          state: present
+          type: iso
+          iso_path: "[Datastore01] /rhel-8.2-x86_64-boot.iso"
+      hardware:
+        memory_mb: 2048
+        num_cpus: 2
+        num_cpu_cores_per_socket: 2
+      name:  "{{ hostname }}"
+      folder: /Datacenter01/vm/
+      guest_id: otherGuest64
+      networks:
+        - name: "VM Network"
+
+  - name: Handle boot parameter
+    vmware_guest_sendkey:
+      validate_certs: False
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "{{ hostname }}"
+      keys_send:
+        - ESC
+        - ESC
+    delegate_to: localhost
+
+  - name: Handle boot parameter
+    vmware_guest_sendkey:
+      validate_certs: False
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "{{ hostname }}"
+      string_send: 'vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 inst.ks=http://{{ httpd_ip }}:{{ httpd_port }}/{{ kickstart_file }}'
+    delegate_to: localhost
+    vars:
+      kickstart_file: rhel8.cfg
+      httpd_ip: 192.168.0.50
+      httpd_port: 9000
+
+  - name: Start installation after providing boot parameter at installation prompt
+    vmware_guest_sendkey:
+      validate_certs: False
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "{{ hostname }}"
+      keys_send:
+        - ENTER
+    delegate_to: localhost
+

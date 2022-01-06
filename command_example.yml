@@ -1,23 +1,10 @@
 ---
-- name: gather facts from host via snmp using the command module from localhost
-  hosts: test_servers
+- name: lol
+  hosts: localhost
   gather_facts: no
   connection: local
-  vars:
-    oid: .1.3.1.1
-  vars_prompt:
-    - name: community_string
-      prompt: Enter the community string
-      unsafe: yes
-      private: yes
 
   tasks:
-    - name: get snmp
-      command: snmpget -v 2c -c {{ community_string }} {{ ansible_host}} {{ oid }}
-      register: snmp_result
-
-    - name: show result
-      debug:
-        msg:
-          - "inventory_host: {{ inventory_hostname }}"
-          - "snmp res: {{ snmp_result }}"
+    - name: foo
+      command: python3 foo.py
+      register: foo
