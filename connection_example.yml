@@ -1,6 +1,5 @@
 ---
 - name: example to show the difference between local connection and ssh
-  hosts: "{{ lol }}"
   gather_facts: no
   connection: local
   vars:
