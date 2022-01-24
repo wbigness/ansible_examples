@@ -58,7 +58,7 @@
     delegate_to: localhost
     vars:
       kickstart_file: rhel8.cfg
-      httpd_ip: 192.168.0.50
+      httpd_ip: 192.168.0.xx
       httpd_port: 9000
 
   - name: Start installation after providing boot parameter at installation prompt
