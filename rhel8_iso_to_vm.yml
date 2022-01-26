@@ -8,7 +8,7 @@
   vars:
     hostname: kickstart_vm
     vcenter_hostname: '{{ lookup("env", "VMWARE_HOST") }}'
-    vcenter_username: '{{ lookup("env", "VMWARE_USERNAME") }}'
+    vcenter_username: '{{ lookup("env", "VMWARE_USER") }}'
     vcenter_password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
   tasks:
   - name: Boot VM with RHEL 8 installation iso in CDROM
