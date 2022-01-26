@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
+  collections:
+    - community.vmware
   gather_facts: no
   vars_files:
     - vcenter_vars.yml
