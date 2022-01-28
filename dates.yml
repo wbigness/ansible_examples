@@ -4,7 +4,6 @@
   hosts: localhost
   vars: 
     - file_date: "20210820"
-    - vms: "100-107"
 
   tasks:
     - name: get current date
@@ -12,12 +11,6 @@
       run_once: true
       register: date
   
-    - name: show date
+    - name: show number of days elapsed since file_date
       debug:
        msg: "{{ ((date.stdout | to_datetime('%Y%m%d')) - (file_date | to_datetime('%Y%m%d'))).days  }}"
-
-    - name: loop range lol
-      debug: 
-        msg: "{{ item }}"
-      with_sequence: start="{{ vms.split('-')[0]| int }}" end="{{ vms.split('-')[1]| int }}"
-      
