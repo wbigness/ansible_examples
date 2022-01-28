@@ -2,7 +2,7 @@
 - name: test loop
   hosts: localhost
   vars:
-    profiles:
+    - profiles:
       - profile_name: "first_profile"
         nodes:
           - "node1"
@@ -11,8 +11,27 @@
         nodes:
           - "node3"
           - "node4"
-    
+    - vms: "100-100"
+    - ips: "8.8.8.8,9.9.9.9"
+    - ip: "8.8.8.8"
+
+
   tasks:
+    - name: loop range lol
+      debug:
+        msg: "{{ item }}"
+      with_sequence: start="{{ vms.split('-')[0]| int }}" end="{{ vms.split('-')[1]| int }}"
+
+    - name: show list of comma sep strings
+      debug:
+        msg:
+          - "{{ ips.split(',') }}"
+          - "{{ ip.split(',') }}"
+    - name: loop
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ ips.split(',') }}"
+
     - name: show it
       debug:
         msg: "{{ item.profile_name }} {{ item.nodes }}"
