@@ -7,4 +7,4 @@
   tasks:
     - name: list directory
       ansible.builtin.shell:
-        cmd: "dir c:\"
+        cmd: "dir c:"
