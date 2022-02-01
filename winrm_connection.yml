@@ -1,0 +1,9 @@
+---
+- name: test simple windows command
+  hosts: all
+  gather_facts: no
+  vars:
+    - ansible_connection: winrm
+  tasks:
+    - name: list directory
+      command: "dir c:\"
