@@ -2,7 +2,6 @@
 - name: test simple linux command
   hosts: all
   gather_facts: no
-  connection: local
 
   tasks:
     - name: list directory
