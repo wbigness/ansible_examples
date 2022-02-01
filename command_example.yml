@@ -1,10 +1,9 @@
 ---
-- name: lol
-  hosts: localhost
+- name: test simple linux command
+  hosts: all
   gather_facts: no
   connection: local
 
   tasks:
-    - name: foo
-      command: python3 foo.py
-      register: foo
+    - name: list directory
+      command: ls -l /etc/
