@@ -6,5 +6,5 @@
     - ansible_connection: winrm
   tasks:
     - name: list directory
-      ansible.builtin.shell:
+      ansible.builtin.win_shell:
         cmd: "dir c:"
