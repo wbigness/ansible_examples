@@ -14,3 +14,7 @@
     - name: show number of days elapsed since file_date
       debug:
        msg: "{{ ((date.stdout | to_datetime('%Y%m%d')) - (file_date | to_datetime('%Y%m%d'))).days  }}"
+    
+    - name: show default
+      debug:
+       msg: "{{ lol | default('') }}"
