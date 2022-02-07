@@ -17,4 +17,5 @@
           - "hostname: {{ host_name_result.stdout }}"
           - "inventory_host: {{ inventory_hostname }}"
           - "ansible_host: {{ ansible_host }}"
+          - "ansible_user: {{ ansible_user }}"
           - "device: {{ device }}"

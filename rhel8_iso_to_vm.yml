@@ -3,8 +3,6 @@
   collections:
     - community.vmware
   gather_facts: no
-  vars_files:
-    - vcenter_vars.yml
   vars:
     hostname: kickstart_vm
     vcenter_hostname: '{{ lookup("env", "VMWARE_HOST") }}'
@@ -17,7 +15,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      datacenter: "{{ dc1 }}"
+      datacenter: Datacenter01
       state: poweredon
       cluster: Cluster01
       disk:
