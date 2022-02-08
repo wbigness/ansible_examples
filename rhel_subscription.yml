@@ -1,0 +1,11 @@
+---
+- name: rhel subscription example
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Register as user with password and auto-subscribe to available content.
+      community.general.redhat_subscription:
+        state: present
+        username: "{{ rhel_username }}"
+        password: "{{ rhel_password }}"
+        auto_attach: true
