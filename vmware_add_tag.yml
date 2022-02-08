@@ -1,0 +1,19 @@
+---
+- name: add a tag to a VMs
+  hosts: localhost
+  connection: local
+  vars:
+    tag_name: "John"
+    tag_category: "Owner"
+  tasks:
+    - name: Add Tag 
+      vmware_tag_manager:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: no
+        tag_names:
+          - "{{ tag_category }}:{{ tag_name }}"
+        object_name: kickstart_vm
+        object_type: VirtualMachine
+        state: add
