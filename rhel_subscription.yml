@@ -9,3 +9,7 @@
         username: "{{ rhel_username }}"
         password: "{{ rhel_password }}"
         auto_attach: true
+      register: rhel_subscription_result
+    - name: show pool id
+      debug:
+        msg: "{{ rhel_subscription_result }}"
