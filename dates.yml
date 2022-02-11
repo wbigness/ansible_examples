@@ -1,7 +1,7 @@
 ---
 # example for date math functions.
 - name: test date func
-  hosts: localhost
+  hosts: default
   vars: 
     - file_date: "20210820"
 
@@ -10,6 +10,7 @@
       local_action: command date +%Y%m%d
       run_once: true
       register: date
+      delegate_to: localhost
   
     - name: show number of days elapsed since file_date
       debug:
