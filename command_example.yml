@@ -1,6 +1,6 @@
 ---
 - name: test simple linux command
-  hosts: all
+  hosts: none
   gather_facts: no
 
   tasks:
