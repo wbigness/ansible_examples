@@ -1,6 +1,6 @@
 ---
 - name: Run a series of Commands
-  hosts: your_host_group
+  hosts: none
   connection: local
   vars:
     process_one_commands: "[ls -l, cat /etc/hosts]"
