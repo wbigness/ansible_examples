@@ -1,7 +1,7 @@
 ---
 # example for date math functions.
 - name: test date func
-  hosts: none
+  hosts: "{{ hosts }}"
   vars: 
     - file_date: "20210820"
 
