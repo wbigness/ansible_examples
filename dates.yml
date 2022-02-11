@@ -1,6 +1,7 @@
 ---
 # example for date math functions.
 - name: test date func
+  hosts: localhost
   vars: 
     - file_date: "20210820"
 
