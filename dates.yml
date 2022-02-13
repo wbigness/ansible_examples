@@ -1,7 +1,7 @@
 ---
 # example for date math functions.
 - name: test date func
-  hosts: localhost
+  hosts: "{{ ansible_limit | default(omit) }}"
   vars: 
     - file_date: "20210820"
 
