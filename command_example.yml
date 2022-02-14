@@ -1,6 +1,6 @@
 ---
 - name: test simple linux command
-  hosts: none
+  hosts: "{{ ansible_limit | default(omit) }}"
   gather_facts: no
 
   tasks:
