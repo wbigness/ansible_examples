@@ -1,6 +1,6 @@
 ---
 - name: rhel subscription example
-  hosts: all
+  hosts: "{{ ansible_limit | default(omit) }}"
   gather_facts: no
   tasks:
     - name: Register as user with password and auto-subscribe to available content.
