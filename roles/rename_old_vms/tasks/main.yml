@@ -1,0 +1,38 @@
+---
+- name: get current date
+  local_action: command date +%m-%d-%y
+  run_once: true
+  register: date_today
+  delegate_to: localhost
+
+- name: collect vms in target folder
+  community.vmware.vmware_vm_info:
+    hostname: "{{ lookup('env','VMWARE_HOST') }}"
+    username: "{{ lookup('env','VMWARE_USER') }}"
+    password: "{{ lookup('env','VMWARE_PASSWORD') }}"
+    validate_certs: False
+    folder: "{{ datacenter_name }}/vm/{{ folder }}"
+  register: decom_vms
+  delegate_to: localhost
+
+- name: find vms older than 30 days
+  set_fact:
+    vms_to_rename: "{{ vms_to_rename + [ item.guest_name ]}}"
+  when: "{{ ((date_today.stdout | to_datetime('%m-%d-%y')) - (item.guest_name.split('_')[1] | to_datetime('%m-%d-%y'))).days  }} > 30"
+  loop: "{{ decom_vms.virtual_machines }}"
+
+- name: display vms to be deleted
+  debug:
+    msg: "{{ vms_to_rename }}"
+
+- name: Rename virtual machines
+  community.vmware.vmware_object_rename:
+    hostname: "{{ lookup('env','VMWARE_HOST') }}"
+    username: "{{ lookup('env','VMWARE_USER') }}"
+    password: "{{ lookup('env','VMWARE_PASSWORD') }}"
+    validate_certs: False
+    object_name: "{{ item }}"
+    new_name: "{{ item }}_DELETE_ME_NOW"
+    object_type: VirtualMachine
+  loop: "{{ vms_to_rename }}"
+  delegate_to: localhost
