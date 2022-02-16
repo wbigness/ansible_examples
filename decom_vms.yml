@@ -3,7 +3,6 @@
   gather_facts: no
   vars: 
     - folder: "Decommission_VMs"
-    - vms_to_rename: []
     - datacenter_name: "Datacenter01"
   roles:
     - rename_old_vms
