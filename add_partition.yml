@@ -1,0 +1,36 @@
+---
+- name: show facts
+  hosts: vault
+  tasks:
+    - name: create new partition
+      community.general.parted:
+        device: /dev/nvme0n2
+        number: 1
+        state: present
+      register: new_partition
+    
+    - name: show new partition result
+      debug:
+        msg: "{{ new_partition }}"
+    
+    - name: Create a ext4 filesystem 
+      community.general.filesystem:
+        fstype: ext4
+        dev: /dev/nvme0n2p1
+      register: new_filesystem
+    
+    - name: show new filesystem result
+      debug:
+        msg: "{{ new_filesystem }}"
+    
+    - name: Mount disk
+      ansible.posix.mount:
+        src: /dev/nvme0n2p1
+        path: /storage
+        fstype: ext4
+        state: mounted
+      register: mount_result
+    
+    - name: show mount result
+      debug:
+        msg: "{{ mount_result }}"
