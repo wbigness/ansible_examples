@@ -1,0 +1,24 @@
+---
+- name: add disk to vcenter vm
+  community.vmware.vmware_guest_disk:
+    hostname: "{{ lookup('env','VMWARE_HOST') }}"
+    username: "{{ lookup('env','VMWARE_USER') }}"
+    password: "{{ lookup('env','VMWARE_PASSWORD') }}"
+    validate_certs: False
+    datacenter: "{{ datacenter_name }}"
+    name: "{{ inventory_hostname }}"
+    disk:
+      - size_gb: 10
+        type: thin
+        autoselect_datastore: True
+        state: present
+        scsi_controller: 1
+        unit_number: 1
+        scsi_type: 'paravirtual'
+        disk_mode: 'persistent'
+  delegate_to: localhost
+  register: add_disk_result
+
+- name: display result
+  debug:
+    msg: "{{ add_disk_result }}"

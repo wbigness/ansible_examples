@@ -1,0 +1,33 @@
+---
+- name: create new partition
+  community.general.parted:
+    device: "{{ disk_device }}"
+    number: 1
+    state: present
+  register: new_partition
+
+- name: show new partition result
+  debug:
+    msg: "{{ new_partition }}"
+
+- name: Create a ext4 filesystem 
+  community.general.filesystem:
+    fstype: "{{ filesystem_type }}"
+    dev: "{{ disk_device_partition }}"
+  register: new_filesystem
+
+- name: show new filesystem result
+  debug:
+    msg: "{{ new_filesystem }}"
+
+- name: Mount disk
+  ansible.posix.mount:
+    src: "{{ disk_device_partition }}"
+    path: "{{ mount_point }}"
+    fstype: "{{ filesystem_type }}"
+    state: mounted
+  register: mount_result
+
+- name: show mount result
+  debug:
+    msg: "{{ mount_result }}"
