@@ -1,0 +1,10 @@
+---
+- name: test simple linux command
+  hosts: "{{ ansible_limit | default(omit) }}"
+  gather_facts: no
+  vars_files:
+    - test_vault.yml
+
+  tasks:
+    - name: list directory
+      command: ls -l /etc/
