@@ -1,0 +1,5 @@
+---
+- name: DevSec RHEL8 hardening playbook
+  hosts: "{{ ansible_limit }}"
+  roles:
+    - devsec.hardening.os_hardening
