@@ -1,0 +1,10 @@
+---
+- name: file lookup plugin example
+  hosts: localhost
+  vars:
+    my_dir: ./
+  tasks:
+    - name: show file
+      ansible.builtin.debug:
+        msg: "{{ lookup('ansible.builtin.file', my_dir + 'README.md') }}"
+
