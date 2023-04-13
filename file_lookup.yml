@@ -4,7 +4,12 @@
   vars:
     my_dir: ./
   tasks:
+    - name: set a var
+      ansible.builtin.set_fact:
+        file_content: "{{ lookup('ansible.builtin.file', my_dir + 'README.md') }}"
+
     - name: show file
       ansible.builtin.debug:
-        msg: "{{ lookup('ansible.builtin.file', my_dir + 'README.md') }}"
+        msg: "{{ item }}"
+      loop: "{{ file_content.split('\n') }}"
 

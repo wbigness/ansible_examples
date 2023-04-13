@@ -1,7 +1,7 @@
 ---
 # example for date math functions.
 - name: test date func
-  hosts: "{{ ansible_limit | default(omit) }}"
+  hosts: localhost
   vars: 
     - file_date: "20210820"
 
@@ -19,3 +19,13 @@
     - name: show default
       debug:
        msg: "{{ lol | default('') }}"
+    
+    - name: get current again
+      local_action: command date +%m_%d_%Y
+      run_once: true
+      register: date_again
+      delegate_to: localhost
+
+    - name: ansible date
+      debug:
+        msg: "Today_{{ date_again.stdout }}"

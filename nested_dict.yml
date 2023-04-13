@@ -1,0 +1,114 @@
+---
+- name: pre failover check
+  hosts: localhost
+  connection: local
+  vars:
+    host_name_with_dashes: local-host
+    localhost:
+      vrfs:
+        - vrf_name: sjc-p2p-google-public-cloud
+          neighbor_ips: 
+            - 74.125.146.120
+            - 10.46.1.30
+            - 10.46.0.186
+            - 10.46.118.137
+        - vrf_name: gcp-qa-private
+          neighbor_ips:
+            - 169.254.24.65
+        - vrf_name: gcp-prod-private
+          neighbor_ips:
+            - 169.254.23.97
+        - vrf_name: thdlabs-apim-sbox
+          neighbor_ips:
+            - 169.254.168.9
+
+    local_host:
+      vrfs:
+        - vrf_name: sjc-p2p-google-public-cloud
+          neighbor_ips: 
+            - 1.1.1.1
+            - 10.46.1.30
+            - 10.46.0.186
+            - 10.46.118.137
+    # nd:
+    #   interfaces:
+    #     - name: eth1
+    #       tags: 
+    #         - tag_name: service_assurance
+    #           tag_display: SA1
+    #         - tag_name: HI
+    #           tag_display: SA2
+    #         - tag_name: also_not_service_assurance
+    #           tag_display: SA3
+    #       enabled: false
+    #     - name: eth2
+    #       tags: 
+    #         - tag_name: service_assurance
+    #           tag_display: SA1
+    #         - tag_name: not_service_assurance
+    #           tag_display: SA2
+    #         - tag_name: also_not_service_assurance
+    #           tag_display: SA3
+    #       enabled: true
+    #     - name: eth3
+    #       tags: []
+    #       enabled: false
+    
+    nd:
+      interfaces:
+        - name: eth1
+          description: gateway 1
+          tags: 
+            - service_assurance
+            - not_service_assurance
+          enabled: false
+        - name: eth2
+          description: gateway 2
+          tags:
+            - service_assurance
+            - not_service_assurance
+          enabled: true
+        - name: eth3
+          description: lol
+          tags: []
+          enabled: false
+
+  tasks:
+    - name: store route
+      ansible.builtin.set_fact:
+        "ro_{{ item.1 | replace('.', '_') }}_{{ item.0.vrf_name | replace('-', '_') }}": "{{ item.1 }}"
+      with_subelements:
+        - "{{ lookup('vars', inventory_hostname).vrfs }}"
+        - neighbor_ips
+
+    - name: show results main loop
+      ansible.builtin.debug:
+        msg:
+          - "{{ lookup('vars', 'ro_' + item.1 | replace('.', '_') + '_' + item.0.vrf_name | replace('-', '_') ) }}"
+      with_subelements:
+        - "{{ lookup('vars', inventory_hostname).vrfs }}"
+        - neighbor_ips
+    
+    - name: show counter
+      ansible.builtin.set_fact:
+        "loop_item_{{ ansible_loop.index0 }}": "{{ ansible_loop.index0 }}"
+      loop: "{{ lookup('vars', inventory_hostname).vrfs }}"
+      loop_control:
+        extended: yes
+    
+    - name: test removing dashes from an inventory_host
+      ansible.builtin.debug: 
+        msg: "{{ lookup('vars', inventory_hostname|replace('-', '_')).vrfs }}"
+    
+    - name: init list
+      ansible.builtin.set_fact: 
+        interfaces_to_shutdown: {}
+
+    - name: loop over nested dictionary
+      ansible.builtin.set_fact: 
+        interfaces_to_shutdown: "{{ interfaces_to_shutdown | combine({item.0.name: item.0['description']}) }}"
+      with_subelements:
+        - "{{ nd.interfaces }}"
+        - tags
+      when: item.1 == "service_assurance" and item.0.enabled == false
+...
