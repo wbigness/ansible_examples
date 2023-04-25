@@ -36,3 +36,10 @@
       debug:
         msg: "{{ item.profile_name }} {{ item.nodes }}"
       loop: "{{ profiles }}"
+
+    - name: ad hoc list of dictionaries
+      debug:
+        msg: "{{ item.config }}"
+      with_items:
+        - { config: lol }
+        - { config: hay }
