@@ -14,6 +14,7 @@
     - vms: "100-107"
     - ips: "8.8.8.8,9.9.9.9"
     - ip: "8.8.8.8"
+    - generic_list: ["one", "two"]
 
 
   tasks:
@@ -43,3 +44,10 @@
       with_items:
         - { config: lol }
         - { config: hay }
+
+    - name: item in list
+      ansible.builtin.debug:
+        msg: "{{ item in generic_list }}"
+      loop: 
+        - "one"
+        - "five"

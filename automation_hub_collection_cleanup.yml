@@ -1,0 +1,30 @@
+---
+- name: Playbook for Deleting older collection versions
+  hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+    - name: Pull the highest 300 versions
+      ansible.builtin.uri:
+        url: "{{ inventory_hostname }}api/galaxy/v3/plugin/ansible/content/community/collections/index/{{ collection_namespace }}/{{ collection_name }}/versions/?limit=300"
+        user: "{{ username }}"
+        password: "{{ password }}"
+        follow_redirects: all
+        force_basic_auth: true
+        method: GET
+        validate_certs: false
+      register: version_list
+
+    - name: Delete all but the highest 50 versions
+      ansible.builtin.uri:
+        url: "{{ inventory_hostname }}api/galaxy/v3/plugin/ansible/content/community/collections/index/{{ collection_namespace }}/{{ collection_name }}/versions/{{ item.version }}"
+        user: "{{ username }}"
+        password: "{{ password }}"
+        follow_redirects: all
+        force_basic_auth: true
+        method: DELETE
+        validate_certs: false
+        status_code: [200, 202, 204]
+      register: delete_result
+      loop: "{{ version_list.json.data[50:] }}"
+...
