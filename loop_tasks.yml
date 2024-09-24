@@ -1,0 +1,28 @@
+---
+- name: Test debug
+  ansible.builtin.debug:
+    msg: "{{ item.0.name }}_{{ item.1 }}"
+  loop: "{{ products|subelements('versions') }}"
+
+- name: Test debug
+  ansible.builtin.debug:
+    msg: "{{ example_source_data }}"
+
+- name: set the value bases on something obtained from somewhere
+  ansible.builtin.set_fact:
+    "{{ item.0.name }}_{{ item.1 |replace('.', '_') }}":
+      product_name: "{{ item.0.name }}"
+      version: "{{ item.1 }}"
+      source_url: "{{ example_source_data[item.0.name][item.1]['source_url']}}"
+      product_type: "{{ example_source_data[item.0.name][item.1]['product_type']}}"
+  loop: "{{ products|subelements('versions') }}"
+
+- name: Accumulate the collected data
+  ansible.builtin.set_fact:
+    satellite_products: "{{ satellite_products + [lookup('vars', item.0.name + '_' + item.1|replace('.', '_'))] }}"
+  loop: "{{ products|subelements('versions') }}"
+
+- name: Debug rendered data
+  ansible.builtin.debug:
+    msg: "{{ satellite_products }}"
+...

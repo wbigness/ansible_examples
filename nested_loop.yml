@@ -1,0 +1,45 @@
+---
+- name: Nested loop example
+  hosts: localhost
+  gather_facts: false
+  vars:
+    products:
+      - name: epel
+        versions:
+          - "7"
+          - "8"
+      - name: ansible
+        versions:
+          - "2.3"
+          - "2.4"
+      - name: openshift
+        versions:
+          - "3"
+    example_source_data:
+        ansible:
+          "2.3":
+            source_url: https://fedora.com/ansible/2.3
+            product_type: automation
+          "2.4":
+            source_url: https://fedora.com/ansible/2.4
+            product_type: automation
+        epel:
+          "7":
+            source_url: https://fedora.com/epel/7
+            product_type: operating system
+          "8":
+            source_url: https://fedora.com/epel/8
+            product_type: operating system
+        openshift:
+          "3":
+            source_url: https://fedora.com/openshift/3
+            product_type: container management
+  tasks:
+    - name: Create a new list to accumulate data
+      ansible.builtin.set_fact:
+        satellite_products: []
+
+    - name: Build new dictionary based on selected products
+      ansible.builtin.include_tasks:
+        file: loop_tasks.yml    
+...

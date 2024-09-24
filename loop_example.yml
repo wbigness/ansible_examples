@@ -51,3 +51,7 @@
       loop: 
         - "one"
         - "five"
+
+    - name: Flatten list
+      ansible.builtin.debug:
+        msg: "tcp {{ generic_list | join(', tcp ') }}"
