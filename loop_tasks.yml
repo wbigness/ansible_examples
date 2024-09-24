@@ -4,10 +4,6 @@
     msg: "{{ item.0.name }}_{{ item.1 }}"
   loop: "{{ products|subelements('versions') }}"
 
-- name: Test debug
-  ansible.builtin.debug:
-    msg: "{{ example_source_data }}"
-
 - name: set the value bases on something obtained from somewhere
   ansible.builtin.set_fact:
     "{{ item.0.name }}_{{ item.1 |replace('.', '_') }}":
