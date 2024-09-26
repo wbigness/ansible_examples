@@ -1,0 +1,41 @@
+repo_state: present
+
+ansible_23_connected_url: "https://fedora.com/ansible/2.3"
+ansible_24_connected_url: "https://fedora.com/ansible/2.4"
+fedora_7_connected_url: "https://fedora.com/epel/7"
+fedora_8_connected_url: "https://fedora.com/epel/8"
+openshift_3_connected_url: "https://localshift.com/openshift/3/"
+
+ansible_23_disconnected_url: "{{ 'https://wrtlol.local/ansible/2.3' if satellite_disconnected == True else null }}"
+ansible_24_disconnected_url: "{{ 'https://wrtlol.local/ansible/2.4' if satellite_disconnected == True else null }}"
+fedora_7_disconnected_url: "{{ 'https://local.lol.com/epel/7' if satellite_disconnected == True else null }}"
+fedora_8_disconnected_url: "{{ 'https://local.lol.com/epel/8' if satellite_disconnected == True else null }}"
+openshift_3_disconnected_url: "{{ 'https://local.wrt.com/openshift/3' if satellite_disconnected == True else null }}"
+
+satellite_products:
+  - name: ansible
+    key: 123456
+    state: "{{ repo_state }}"
+    repositories:
+      - name: "2.3"
+        source_url: "{{ ansible_23_disconnected_url | default(ansible_23_connected_url) }}"
+        product_type: automation
+      - name: "2.4"
+        source_url: "{{ ansible_24_disconnected_url | default(ansible_24_connected_url) }}"
+        product_type: automation
+  - name: epel
+    state: "{{ repo_state }}"
+    repositories:
+      - name: "7"
+        source_url: "{{ fedora_7_disconnected_url | default(fedora_7_connected_url) }}"
+        product_type: operating system
+      - name: "8"
+        source_url: "{{ fedora_8_disconnected_url | default(fedora_8_connected_url) }}"
+        product_type: operating system
+  - name: openshift
+    state: "{{ repo_state }}"
+    repositories:
+      - name: "3"
+        source_url: "{{ openshift_3_disconnected_url | default(openshift_3_connected_url) }}"
+        product_type: container management
+... 

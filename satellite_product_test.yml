@@ -1,0 +1,13 @@
+---
+- name: Test the rendering of variables for connected and disconnected node configuration
+  hosts: all
+  gather_facts: true
+  vars_files:
+    - satellite_vars.yml
+     
+  tasks:
+    - name: Render var with default or host vars
+      ansible.builtin.debug:
+        msg: "{{ satellite_products }}"
+      delegate_to: localhost
+...
