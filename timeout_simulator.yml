@@ -6,5 +6,5 @@
     - name: Run the wait for module for specified time period
       ansible.builtin.wait_for:
         timeout: "{{ timeout_seconds }}"
-      delegate_to: locahost
+      delegate_to: localhost
 ...
