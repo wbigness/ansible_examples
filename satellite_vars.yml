@@ -1,41 +1,53 @@
-repo_state: present
-
-ansible_23_connected_url: "https://fedora.com/ansible/2.3"
-ansible_24_connected_url: "https://fedora.com/ansible/2.4"
-fedora_7_connected_url: "https://fedora.com/epel/7"
-fedora_8_connected_url: "https://fedora.com/epel/8"
+ansible_2_3_connected_url: "https://fedora.com/ansible/2.3"
+ansible_2_4_connected_url: "https://fedora.com/ansible/2.4"
+epel_7_connected_url: "https://fedora.com/epel/7"
+epel_8_connected_url: "https://fedora.com/epel/8"
 openshift_3_connected_url: "https://localshift.com/openshift/3/"
 
-ansible_23_disconnected_url: "{{ 'https://wrtlol.local/ansible/2.3' if satellite_disconnected == True else null }}"
-ansible_24_disconnected_url: "{{ 'https://wrtlol.local/ansible/2.4' if satellite_disconnected == True else null }}"
-fedora_7_disconnected_url: "{{ 'https://local.lol.com/epel/7' if satellite_disconnected == True else null }}"
-fedora_8_disconnected_url: "{{ 'https://local.lol.com/epel/8' if satellite_disconnected == True else null }}"
-openshift_3_disconnected_url: "{{ 'https://local.wrt.com/openshift/3' if satellite_disconnected == True else null }}"
+# ansible_2_3_disconnected_url: "{{ 'https://wrtlol.local/ansible/2.3' if satellite_disconnected == True else none }}"
+# ansible_2_4_disconnected_url: "{{ 'https://wrtlol.local/ansible/2.4' if satellite_disconnected == True else none }}"
+# epel_7_disconnected_url: "{{ 'https://local.lol.com/epel/7' if satellite_disconnected == True else none }}"
+# epel_8_disconnected_url: "{{ 'https://local.lol.com/epel/8' if satellite_disconnected == True else none }}"
+# openshift_3_disconnected_url: "{{ 'https://local.wrt.com/openshift/3' if satellite_disconnected == True else none }}"
 
+# Mock list of repositories obtained from connected satellite server
+# disconnected_repositories:
+#   - name: "ansible 2.3"
+#     full_url: "https://connected_satellite.local/ansible/23"
+#   - name: "ansible 2.4"
+#     full_url: "https://connected_satellite.local/ansible/24"
+#   - name: "epel 7"
+#     full_url: "https://connected_satellite.local/epel/7"
+#   - name: "epel 8"
+#     full_url: "https://connected_satellite.local/epel/8"
+#   - name: "openshift 3"
+#     full_url: "https://connected_satellite.local/openshift/3"    
+
+# Need to explain naming convention here :)
 satellite_products:
-  - name: ansible
+  - name: "ansible"
     key: 123456
-    state: "{{ repo_state }}"
+    state: enabled
     repositories:
-      - name: "2.3"
-        source_url: "{{ ansible_23_disconnected_url | default(ansible_23_connected_url) }}"
+      - name: "ansible 2.3"
+        source_url: "{{ ansible_2_3_disconnected_url | default(ansible_2_3_connected_url) }}"
         product_type: automation
-      - name: "2.4"
-        source_url: "{{ ansible_24_disconnected_url | default(ansible_24_connected_url) }}"
+      - name: "ansible 2.4"
+        source_url: "{{ ansible_2_4_disconnected_url | default(ansible_2_4_connected_url) }}"
         product_type: automation
-  - name: epel
-    state: "{{ repo_state }}"
+  - name: "epel"
+    state: enabled
     repositories:
-      - name: "7"
-        source_url: "{{ fedora_7_disconnected_url | default(fedora_7_connected_url) }}"
+      - name: "epel 7"
+        source_url: "{{ epel_7_disconnected_url | default(epel_7_connected_url) }}"
         product_type: operating system
-      - name: "8"
-        source_url: "{{ fedora_8_disconnected_url | default(fedora_8_connected_url) }}"
+      - name: "epel 8"
+        source_url: "{{ epel_8_disconnected_url | default(epel_8_connected_url) }}"
         product_type: operating system
-  - name: openshift
-    state: "{{ repo_state }}"
+  - name: "openshift"
+    state: enabled
     repositories:
-      - name: "3"
+      - name: "openshift 3"
         source_url: "{{ openshift_3_disconnected_url | default(openshift_3_connected_url) }}"
         product_type: container management
 ... 

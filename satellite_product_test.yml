@@ -1,12 +1,39 @@
----
 - name: Test the rendering of variables for connected and disconnected node configuration
   hosts: all
+  serial: 1
   gather_facts: true
   vars_files:
     - satellite_vars.yml
      
   tasks:
-    - name: Render var with default or host vars
+    - name: Mock retrieve repo data
+      ansible.builtin.set_fact:
+        disconnected_repositories:
+          - name: "ansible 2.3"
+            full_url: "https://connected_satellite.local/ansible/23"
+          - name: "ansible 2.4"
+            full_url: "https://connected_satellite.local/ansible/24"
+          - name: "epel 7"
+            full_url: "https://connected_satellite.local/epel/7"
+          - name: "epel 8"
+            full_url: "https://connected_satellite.local/epel/8"
+          - name: "openshift 3"
+            full_url: "https://connected_satellite.local/openshift/3"
+      when: satellite_disconnected is defined and satellite_disconnected == True
+
+
+    - name: Create the disconnected url vars
+      ansible.builtin.set_fact:
+        "{{ item.name | replace(' ', '_') | replace('.', '_') + '_disconnected_url' }}": "{{ item.full_url }}"
+      loop: "{{ disconnected_repositories }}"
+      when: satellite_disconnected is defined and satellite_disconnected == True
+
+    - name: Render the vars again
+      ansible.builtin.include_vars:
+        file: satellite_vars.yml
+      when: satellite_disconnected is defined and satellite_disconnected == True
+
+    - name: Show updated var
       ansible.builtin.debug:
         msg: "{{ satellite_products }}"
       delegate_to: localhost
