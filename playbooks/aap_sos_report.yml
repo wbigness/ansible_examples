@@ -1,0 +1,41 @@
+---
+- name: Generate sos reports on all aap hosts and upload files to one host
+  hosts: "{{ ansible_limit }}"
+  vars:
+    target_directory: /var/tmp/sos_reports/new/
+    backup_directory: /var/tmp/sos_reports/old/
+  
+  tasks:
+    - name: Make target directory
+      ansible.builtin.file:
+        path: "{{ target_directory }}" 
+        state: directory
+      become: true
+
+    - name: Make backup dir for old sos reports
+      ansible.builtin.file:
+        path: "{{ backup_directory }}"
+        state: directory
+      become: true
+
+    - name: Move old sos reports
+      ansible.builtin.command: mv {{ target_directory }}* {{ backup_directory }}
+      become: true
+      ignore_errors: true
+
+    - name: Run the sos report
+      ansible.builtin.command: sos report --batch --tmp-dir {{ target_directory }} --all-logs --case-id {{ support_case_id }} 
+      become: true
+      register: report_result
+
+    - name: Show output from report command
+      ansible.builtin.debug:
+        msg: "{{ report_result }}"
+
+    - name: Change report file owner
+      ansible.builtin.shell: chown -R ansible:ansible {{ target_directory }}
+      become: true
+
+    - name: Copy the file to a destination host
+      ansible.builtin.shell: scp -r {{ target_directory }} ansible@{{ destination_host }}:~/sos_reports/
+...
