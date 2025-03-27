@@ -11,19 +11,25 @@
     - name: Set keepalive time
       ansible.builtin.lineinfile:
         path: /etc/sysctl.conf
+	regexp: '^net.ipv4.tcp_keepalive_time'
         line: net.ipv4.tcp_keepalive_time = {{ time }}
+        backup: yes
       become: true
 
     - name: Set keepalive intvl
       ansible.builtin.lineinfile: 
         path: /etc/sysctl.conf
+	regexp: '^net.ipv4.tcp_keepalive_intvl'
         line: net.ipv4.tcp_keepalive_intvl = {{ intvl }}
+	backup: yes
       become: true
 
     - name: Set keepalive probes
       ansible.builtin.lineinfile: 
         path: /etc/sysctl.conf
+	regexp: '^net.ipv4.tcp_keepalive_probes'
         line: net.ipv4.tcp_keepalive_probes = {{ probes }}
+	backup: yes
       become: true
 
     - name: Apply sysctl changes
