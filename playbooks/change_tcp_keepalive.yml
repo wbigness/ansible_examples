@@ -1,0 +1,33 @@
+---
+- name: Change the rhel9 tcp keepalive settings for better connection reliability
+  hosts: "{{ ansible_limit }}"
+  vars:
+    time: 600
+    intvl: 60
+    probes: 20
+  gather_facts: false
+
+  tasks:
+    - name: Set keepalive time
+      ansible.builtin.lineinfile:
+        path: /etc/sysctl.conf
+        line: net.ipv4.tcp_keepalive_time = {{ time }}
+      become: true
+
+    - name: Set keepalive intvl
+      ansible.builtin.lineinfile: 
+        path: /etc/sysctl.conf
+        line: net.ipv4.tcp_keepalive_intvl = {{ intvl }}
+      become: true
+
+    - name: Set keepalive probes
+      ansible.builtin.lineinfile: 
+        path: /etc/sysctl.conf
+        line: net.ipv4.tcp_keepalive_probes = {{ probes }}
+      become: true
+
+    - name: Apply sysctl changes
+      ansible.builtin.command: sysctl -p
+      become: true
+...
+
