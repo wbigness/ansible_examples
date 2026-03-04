@@ -1,0 +1,9 @@
+---
+- name: Add the hosts to guest_vm_inventory
+  ansible.builtin.add_host:
+    name: "{{ item.name }}"
+    group: new_guest_vm_inventory
+    ansible_host: "{{ item.ip }}"
+    foo: "{{ item.purpose }}"
+  loop: "{{ kvm_map[kvm_name] }}"
+...

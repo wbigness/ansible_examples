@@ -1,0 +1,46 @@
+---
+- name: Create a dynamic inventory group with new vms
+  gather_facts: false
+  hosts: kvm_hosts
+  #hosts: kvm_2
+  connection: local
+  vars:
+    kvm_map:
+      kvm_1:
+        - name: "vm_1"
+          ip: 10.1.1.1
+          purpose: "webserver"
+        - name: "vm_2"
+          ip: 10.1.1.2
+          purpose: "db_server"
+      kvm_2:
+        - name: "vm_3"
+          ip: 10.1.1.3
+          purpose: "app_server"
+        - name: "vm_4"
+          ip: 10.1.1.4
+          purpose: "mongo_server"
+      kvm_3:
+        - name: "vm_5"
+          ip: 10.1.1.5
+          purpose: "test_server"
+        - name: "vm_6"
+          ip: 10.1.1.6
+          purpose: "qa_server"
+  tasks:
+    - name: add the hosts to inventory
+      ansible.builtin.include_tasks:
+        file: add_host_task.yml
+      loop: "{{ ansible_play_hosts }}"
+      loop_control:
+        loop_var: kvm_name
+
+- name:  create the vms
+  hosts: new_guest_vm_inventory
+  gather_facts: false
+  connection: local
+  tasks:
+    - name: Create virtual machine
+      ansible.builtin.debug:
+        msg: "building {{ inventory_hostname }} {{ ansible_host }} {{ foo }}"
+...

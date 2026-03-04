@@ -1,0 +1,12 @@
+---
+all:
+  children:
+    hosts:
+      localhost:
+    kvm_hosts:
+      hosts:
+        kvm_1:
+          ansible_host: 10.0.0.2
+        kvm_2:
+          ansible_host: 10.0.0.1
+...
