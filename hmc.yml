@@ -1,3 +1,55 @@
+---
+#################################################
+# STEP 1 — Attach Storage Group on HMC
+#################################################
+
+- name: Attach storage group and extract device numbers
+  hosts: my_hmc_list
+  gather_facts: no
+
+  vars_files:
+    - vault.yml
+
+  vars:
+    lpar_name: "{{ lpar_name }}"
+    storage_group: 12345
+
+  tasks:
+
+    - name: Attach storage group
+      ibm.ibm_zhmc.zhmc_storage_group_attachment:
+        hmc_host: "{{ inventory_hostname }}"
+        hmc_auth: "{{ hmc_auth }}"
+        cpc_name: "{{ cpc_name }}"
+        partition_name: "{{ lpar_name }}"
+        storage_group_name: "{{ storage_group }}"
+        state: attached
+
+    - name: Get partition details
+      ibm.ibm_zhmc.zhmc_partition:
+        hmc_host: "{{ inventory_hostname }}"
+        hmc_auth: "{{ hmc_auth }}"
+        cpc_name: "{{ cpc_name }}"
+        name: "{{ lpar_name }}"
+        state: facts
+        expand_storage_groups: true
+      register: lpar_info
+
+    - name: Extract storage group
+      set_fact:
+        target_sg: "{{ lpar_info.partition['storage-groups']
+                      | selectattr('name','equalto', storage_group)
+                      | list | first }}"
+
+    - name: Extract device numbers
+      set_fact:
+        devnums: "{{ target_sg['virtual-storage-resources']
+                     | map(attribute='device-number')
+                     | sort
+                     | list }}"
+
+    - debug:
+        msg: "FCP devices attached: {{ devnums }}"
 #################################################
 # STEP 2 — Configure Linux host
 #################################################
