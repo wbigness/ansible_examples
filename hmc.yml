@@ -1,0 +1,47 @@
+#################################################
+# STEP 2 — Configure Linux host
+#################################################
+
+- name: Configure FCP adapters and discover disks
+  hosts: linux_host
+  become: yes
+  gather_facts: no
+
+  tasks:
+
+    - name: Remove devices from cio_ignore
+      shell: cio_ignore -r {{ item }}
+      loop: "{{ hostvars[groups['my_hmc_list'][0]].devnums }}"
+
+    - name: Detect offline CHPIDs
+      shell: lschp | awk '$3==0 {print $1}' | sed 's/0.//'
+      register: chpids
+
+    - debug:
+        msg: "Offline CHPIDs: {{ chpids.stdout_lines }}"
+
+    - name: Bring CHPIDs online
+      shell: chchp -c 1 {{ item }}
+      loop: "{{ chpids.stdout_lines }}"
+      when: chpids.stdout_lines | length > 0
+
+    - name: Enable devices
+      shell: chzdev -e zfcp-host {{ item }}
+      loop: "{{ hostvars[groups['my_hmc_list'][0]].devnums }}"
+
+    - name: Rescan SCSI
+      shell: |
+        for host in /sys/class/scsi_host/host*; do
+          echo "- - -" > $host/scan
+        done
+
+    - name: Wait for multipath devices
+      pause:
+        seconds: 5
+
+    - name: Show multipath devices
+      command: multipath -ll
+      register: mp
+
+    - debug:
+        var: mp.stdout_lines
