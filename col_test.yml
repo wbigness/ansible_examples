@@ -1,0 +1,10 @@
+---
+- name: Test collection role
+  hosts: all
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Run the test role
+      ansible.builtin.include_role:
+        name: bigness.test_collection.hello_world
+...
