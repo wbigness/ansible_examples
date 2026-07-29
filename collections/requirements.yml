@@ -3,5 +3,5 @@ collections:
 - community.vmware
 - community.general
 - devsec.hardening
-- bigness.test_collection
+- name: bigness.test_collection
   version: 1.0.0
