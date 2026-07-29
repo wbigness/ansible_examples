@@ -4,3 +4,4 @@ collections:
 - community.general
 - devsec.hardening
 - bigness.test_collection
+  version: 1.0.0
