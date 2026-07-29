@@ -4,4 +4,4 @@ collections:
 - community.general
 - devsec.hardening
 - name: bigness.test_collection
-  version: 1.0.0
+  version: "==1.0.0"
